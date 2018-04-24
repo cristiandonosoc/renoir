@@ -78,7 +78,8 @@ include_directories(${SOURCE_DIR})
 include_directories(SYSTEM ${INCLUDE_DIR}
                            ${IMGUI_DIR}
                            ${SDL2_INCLUDE_DIR}
-                           ${GLM_DIR})
+                           ${GLM_DIR}
+                           ${EXTERNAL_DIR})
 
 #####################################################
 # COMPILER FLAGS
