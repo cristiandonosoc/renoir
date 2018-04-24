@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
-project(picasso)
+project(renoir)
 set(CMAKE_CXX_STANDARD 11)
+
 
 #####################################################
 # SDL2 LOADING
@@ -9,6 +10,8 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
+
+
 
 #####################################################
 # DIRECTORES
@@ -21,6 +24,12 @@ set(BUILD_DIR ${CMAKE_SOURCE_DIR}/bin)
 set(IMGUI_DIR ${CMAKE_SOURCE_DIR}/imgui)
 set(ASSETS_DIR ${CMAKE_SOURCE_DIR}/assets)
 set(GLM_DIR ${CMAKE_SOURCE_DIR}/glm)
+
+if (UNIX)
+  set(PLATFORM_DIR ${CMAKE_SOURCE_DIR}/platforms/linux)
+else()
+  set(PLATFORM_DIR ${CMAKE_SOURCE_DIR}/platforms/win32)
+endif()
 
 set(WINDOWS_PLATFORM_DIR ${CMAKE_SOURCE_DIR}/platforms/win32)
 set(LINUX_PLATFORM_DIR ${CMAKE_SOURCE_DIR}/platforms/linux)
@@ -82,14 +91,12 @@ if (UNIX)
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${LINUX_CXX_FLAGS}")
   # Adding linux linker flags
   set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -ldl")
-  add_library(platform STATIC ${LINUX_SRCS})
 else()
   message(STATUS "Setting MSVC flags")
   # Ignoring the following warnings
   # warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
   set(IGNORES "/wd4267")
   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} ${IGNORES} /MP /WX /EHsc")
-  add_library(platform STATIC ${WINDOWS_SRCS})
 endif()
 
 #####################################################
@@ -120,18 +127,31 @@ endif()
 # TARGET DEFINITIONS
 #####################################################
 
-add_executable(picasso ${SOURCES})
-target_link_libraries(picasso ${SDL2_LIBRARY})
-target_link_libraries(picasso ${OPENGL_LIBRARIES})
-target_link_libraries(picasso platform)
+# EXECUTABLE
+add_executable(renoir ${SOURCES})
+
+target_link_libraries(renoir ${SDL2_LIBRARY})
+target_link_libraries(renoir ${OPENGL_LIBRARIES})
+
+#####################################################
+# PLATFORM
+#####################################################
+
+if (EXISTS ${PLATFORM_DIR})
+  message(FATAL "test")
+  file(GLOB_RECURSE PLATFORM_SRCS ${PLATFORM_DIR}/*.cc
+                                  ${PLATFORM_DIR}/*.h)
+  add_library(platform STATIC ${PLATFORM_SRCS})
+  target_link_libraries(renoir platform)
+endif()
 
 #####################################################
 # SHADER COPY
 #####################################################
 
-add_custom_command(TARGET picasso POST_BUILD
+add_custom_command(TARGET renoir POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_directory
-                   ${ASSETS_DIR} $<TARGET_FILE_DIR:picasso>)
+                   ${ASSETS_DIR} $<TARGET_FILE_DIR:renoir>)
 
 #####################################################
 # OUTPUT
