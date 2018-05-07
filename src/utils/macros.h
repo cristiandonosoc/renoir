@@ -67,13 +67,4 @@
   class_name& operator=(class_name&&) noexcept;
 
 
-
-
-
-
-
-
-
-
-
 #endif  // SRC_UTILS_MACROS_H

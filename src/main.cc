@@ -18,6 +18,8 @@
 #include "utils/printable_enum.h"
 #include "logging/log.h"
 
+#include "editor/ui.h"
+
 PRINTABLE_ENUM(Test, uno, dos);
 
 // TODO(Cristian): Move this to platform
@@ -70,15 +72,19 @@ int main(int, char**) {
   ShowWindow((HWND)io.ImeWindowHandle, SW_MAXIMIZE);
 #endif
 
+  auto *thread_context = ::renoir::platform::GetThreadContext();
+  thread_context->name = "Main thread";
+
+
+  renoir::logging::Log(renoir::logging::LogLevel::LOG_INFO, __FILE__, __LINE__,
+                       "Super test of \"%s\"", "string");
+
   /* fprintf(stderr, "OpenGL Vendor: %s", glGetString(GL_VENDOR)); */
   /* fprintf(stderr, "OpenGL Renderer: %s", glGetString(GL_RENDERER)); */
   /* fprintf(stderr, "OpenGL Version: %s", glGetString(GL_VERSION)); */
   /* fprintf(stderr, "OpenGL Shading Language Version: %s", */
   /*             glGetString(GL_SHADING_LANGUAGE_VERSION)); */
   /* fprintf(stderr, "OpenGL Extension: %s", glGetString(GL_EXTENSIONS)); */
-
-  renoir::logging::Log(renoir::logging::LogLevel::LOG_INFO, __FILE__, __LINE__,
-                       "Super test of \"%s\"", "string");
 
 
   bool done = false;
@@ -103,6 +109,10 @@ int main(int, char**) {
 
       static bool show_demo = true;
       ImGui::ShowDemoWindow(&show_demo);
+
+
+      ::renoir::editor::LogWindow({10, 10}, {500, 200});
+
 
       glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
       glClear(GL_COLOR_BUFFER_BIT);
