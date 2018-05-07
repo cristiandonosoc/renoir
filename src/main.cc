@@ -15,6 +15,9 @@
 #include <imgui/imgui.h>
 #include <external/imgui_impl_sdl_gl3.h>
 
+#include "utils/printable_enum.h"
+
+PRINTABLE_ENUM(Test, uno, dos);
 
 // TODO(Cristian): Move this to platform
 #ifdef _WIN32
@@ -66,12 +69,14 @@ int main(int, char**) {
   ShowWindow((HWND)io.ImeWindowHandle, SW_MAXIMIZE);
 #endif
 
-  fprintf(stderr, "OpenGL Vendor: %s", glGetString(GL_VENDOR));
-  fprintf(stderr, "OpenGL Renderer: %s", glGetString(GL_RENDERER));
-  fprintf(stderr, "OpenGL Version: %s", glGetString(GL_VERSION));
-  fprintf(stderr, "OpenGL Shading Language Version: %s",
-              glGetString(GL_SHADING_LANGUAGE_VERSION));
-  fprintf(stderr, "OpenGL Extension: %s", glGetString(GL_EXTENSIONS));
+  fprintf(stderr, "Test %s", Test::ToString(Test::uno).c_str());
+
+  /* fprintf(stderr, "OpenGL Vendor: %s", glGetString(GL_VENDOR)); */
+  /* fprintf(stderr, "OpenGL Renderer: %s", glGetString(GL_RENDERER)); */
+  /* fprintf(stderr, "OpenGL Version: %s", glGetString(GL_VERSION)); */
+  /* fprintf(stderr, "OpenGL Shading Language Version: %s", */
+  /*             glGetString(GL_SHADING_LANGUAGE_VERSION)); */
+  /* fprintf(stderr, "OpenGL Extension: %s", glGetString(GL_EXTENSIONS)); */
 
 
   bool done = false;
