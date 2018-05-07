@@ -71,11 +71,7 @@ inline bool IsStatusOrOk(const StatusOr<T>& status) {
 }
 
 inline Status CreateStatus(StatusKind result, const char *fmt, ...) {
-  va_list arglist;
-  va_start(arglist, fmt);
-  char buffer[1024];
-  vsnprintf(buffer, sizeof(buffer), fmt, arglist);
-  va_end(arglist);
+  PROCESS_VARGLIST(buffer, 1024, fmt);
 
   Status status;
   status.result = result;
@@ -83,13 +79,10 @@ inline Status CreateStatus(StatusKind result, const char *fmt, ...) {
   return status;
 };
 
+
 inline Status CreateFilenoStatus(StatusKind result, const char *filename, size_t line, 
                                  const char *fmt, ...) {
-  va_list arglist;
-  va_start(arglist, fmt);
-  char buffer[1024];
-  vsnprintf(buffer, sizeof(buffer), fmt, arglist);
-  va_end(arglist);
+  PROCESS_VARGLIST(buffer, 1024, fmt);
 
   Status status;
   status.result = result;

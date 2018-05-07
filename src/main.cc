@@ -16,6 +16,7 @@
 #include <external/imgui_impl_sdl_gl3.h>
 
 #include "utils/printable_enum.h"
+#include "logging/log.h"
 
 PRINTABLE_ENUM(Test, uno, dos);
 
@@ -69,14 +70,15 @@ int main(int, char**) {
   ShowWindow((HWND)io.ImeWindowHandle, SW_MAXIMIZE);
 #endif
 
-  fprintf(stderr, "Test %s", Test::ToString(Test::uno).c_str());
-
   /* fprintf(stderr, "OpenGL Vendor: %s", glGetString(GL_VENDOR)); */
   /* fprintf(stderr, "OpenGL Renderer: %s", glGetString(GL_RENDERER)); */
   /* fprintf(stderr, "OpenGL Version: %s", glGetString(GL_VERSION)); */
   /* fprintf(stderr, "OpenGL Shading Language Version: %s", */
   /*             glGetString(GL_SHADING_LANGUAGE_VERSION)); */
   /* fprintf(stderr, "OpenGL Extension: %s", glGetString(GL_EXTENSIONS)); */
+
+  renoir::logging::Log(renoir::logging::LogLevel::LOG_INFO, __FILE__, __LINE__,
+                       "Super test of \"%s\"", "string");
 
 
   bool done = false;

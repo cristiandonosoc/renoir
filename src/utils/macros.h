@@ -26,6 +26,14 @@
 #define PRINTF_FORMAT_ATTRIBUTE(ignore1, ignore2)
 #endif
 
+#define PROCESS_VARGLIST(buffer_name, buffer_size, arg_varname) \
+  va_list arglist; \
+  va_start(arglist, arg_varname);   \
+  char buffer_name[buffer_size]; \
+  vsnprintf(buffer_name, sizeof(buffer_name), arg_varname, arglist);  \
+  va_end(arglist);
+
+
 // Ignore warnings for Windows because they don't have a good way
 // of ignoring warnings for certain includes
 // (I mean, they did add it in 2018...)
