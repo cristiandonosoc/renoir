@@ -14,16 +14,16 @@
 namespace renoir {
 namespace logging {
 
-ThreadLocalLogContext::ThreadLocalLogContext() : thread_id(std::this_thread::get_id()) {
+using ::renoir::platform::GetThreadContext;
+
+ThreadLocalLogContext::ThreadLocalLogContext() : thread_context(GetThreadContext()) {
   GlobalLogContext *global_context = GetGlobalLogContext();
   size_t size = 0;
   {
     std::lock_guard<std::mutex> guard(global_context->mutex);
-    global_context->log_contexts[thread_id] = this;
+    global_context->log_contexts[thread_context->thread_id] = this;
     size = global_context->log_contexts.size();
   }
-
-  fprintf(stderr, "Created local log context. Size: %zu\n", size);
 }
 
 GlobalLogContext *GetGlobalLogContext() {

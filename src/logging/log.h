@@ -20,6 +20,7 @@
 
 #include "utils/macros.h"
 #include "utils/printable_enum.h"
+#include "platform/thread.h"
 
 #define RNR_THREAD_LOG_ENTRIES 2048
 
@@ -40,7 +41,7 @@ struct LogEntry {
 
 struct ThreadLocalLogContext {
   bool init = false;
-  std::thread::id thread_id;
+  platform::ThreadContext *thread_context;
   size_t read_index;
   size_t write_index;
   LogEntry entries[RNR_THREAD_LOG_ENTRIES];
