@@ -57,18 +57,39 @@ void LogWindow(ImVec2 start_pos, ImVec2 start_size) {
 }
 
 void TestWindow() {
-  SCOPED_TRIGGER(ImGui::Begin("dock_window", NULL, {500, 500}),
-                 ImGui::End());
-  SCOPED_TRIGGER(ImGui::BeginDockspace(), ImGui::EndDockspace());
 
-  static char tmp[128];
-  for (int i = 0; i < 5; i++) {
-    sprintf(tmp, "Dock %d", i);
-    if (ImGui::BeginDock(tmp)) {
-      ImGui::Text("Content of dock %d", i);
+  const ImGuiWindowFlags flags = (ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoResize | 
+                                  ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoSavedSettings | 
+                                  ImGuiWindowFlags_NoTitleBar);
+
+  const float old_rounding = ImGui::GetStyle().WindowRounding;
+  ImGui::GetStyle().WindowRounding = 0;
+  ImGui::SetNextWindowSize(ImGui::GetIO().DisplaySize);
+  ImGui::SetNextWindowPos({0, 0});
+  ImGui::SetNextWindowBgAlpha(0.0f);
+  const bool visible = ImGui::Begin("test_dock", NULL, flags);
+
+  ImGui::GetStyle().WindowRounding = old_rounding;
+
+  if (visible) {
+
+    SCOPED_TRIGGER(ImGui::BeginDockspace(), ImGui::EndDockspace());
+
+    static char tmp[128];
+    for (int i = 0; i < 5; i++) {
+      sprintf(tmp, "Dock %d", i);
+      if (ImGui::BeginDock(tmp)) {
+        ImGui::Text("Content of dock %d", i);
+      }
+      ImGui::EndDock();
     }
-    ImGui::EndDock();
+
+
+
   }
+
+  ImGui::End();
+
 }
 
 
