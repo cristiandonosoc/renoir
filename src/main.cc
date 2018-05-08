@@ -13,6 +13,7 @@
 #include <SDL.h>
 
 #include <imgui/imgui.h>
+#include <external/imguidock.h>
 #include <external/imgui_impl_sdl_gl3.h>
 
 #include "utils/printable_enum.h"
@@ -26,6 +27,10 @@ PRINTABLE_ENUM(Test, uno, dos);
 #ifdef _WIN32
 #include "Windows.h"
 #endif
+
+ImGui::DockContext *global_dock_context = NULL;
+
+
 
 SDL_Window *SetupSDL() {
   // Setup window
@@ -62,6 +67,10 @@ int main(int, char**) {
   ImGui::StyleColorsDark();
   // Mainly sets up the HDC and SDL Keyboard/Mouse stuf
   ImGui_ImplSdlGL3_Init(window);
+
+  global_dock_context = ImGui::CreateDockContext();
+  SCOPED_TRIGGER(ImGui::SetCurrentDockContext(global_dock_context),
+                 ImGui::DestroyDockContext(global_dock_context));
 
 #ifdef _WIN32
   // TODO(Cristian): For some reason, we need this for stdout logging in windows
@@ -112,6 +121,7 @@ int main(int, char**) {
 
 
       ::renoir::editor::LogWindow({10, 10}, {500, 200});
+      ::renoir::editor::TestWindow();
 
 
       glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);

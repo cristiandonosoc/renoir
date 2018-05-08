@@ -12,6 +12,8 @@
 #define SRC_EDITOR_UI_H
 
 #include <imgui/imgui.h>
+#include <external/imguidock.h>
+
 #include "logging/log.h"
 #include "utils/scope_trigger.h"
 #include "utils/string.h"
@@ -38,8 +40,11 @@ void LogWindow(ImVec2 start_pos, ImVec2 start_size) {
   GlobalLogContext *global_context = GetGlobalLogContext();
 
   {
-    SCOPED_TRIGGER(ImGui::BeginChild("left_pane", {150, 0}, true),
+    auto window_width = ImGui::GetWindowWidth();
+    static float pane_ratio = 0.4f;
+    SCOPED_TRIGGER(ImGui::BeginChild("left_pane", {window_width * pane_ratio, 0}, true),
                    ImGui::EndChild());
+
 
     for (auto it : global_context->log_contexts) {
       size_t uid = it.second->thread_context->UID;
@@ -51,7 +56,20 @@ void LogWindow(ImVec2 start_pos, ImVec2 start_size) {
 
 }
 
+void TestWindow() {
+  SCOPED_TRIGGER(ImGui::Begin("dock_window", NULL, {500, 500}),
+                 ImGui::End());
+  SCOPED_TRIGGER(ImGui::BeginDockspace(), ImGui::EndDockspace());
 
+  static char tmp[128];
+  for (int i = 0; i < 5; i++) {
+    sprintf(tmp, "Dock %d", i);
+    if (ImGui::BeginDock(tmp)) {
+      ImGui::Text("Content of dock %d", i);
+    }
+    ImGui::EndDock();
+  }
+}
 
 
 }   // namespace editor
