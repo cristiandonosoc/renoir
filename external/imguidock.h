@@ -4,6 +4,8 @@
 #ifdef _MSC_VER
 #pragma warning(disable:4996)
 #endif
+#define _CRT_SECURE_NO_WARNINGS 1
+#define _CRT_SECURE_NO_DEPRECATE
 
 // based on https://github.com/nem0/LumixEngine/blob/master/external/imgui/imgui_dock.h
 // Lumix Engine Dock. From: https://github.com/nem0/LumixEngine/blob/master/src/editor/imgui/imgui_dock.h
